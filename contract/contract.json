@@ -43,13 +43,6 @@
             "returns": {
                 "type": "void"
             }
-        },
-        {
-            "name": "downvote",
-            "args": [],
-            "returns": {
-                "type": "void"
-            }
         }
     ],
     "networks": {}

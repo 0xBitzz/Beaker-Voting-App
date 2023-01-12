@@ -1,27 +1,35 @@
 #pragma version 8
-intcblock 0 1
-bytecblock 0x7265675f626567696e 0x7265675f656e64 0x766f74655f626567696e 0x766f74655f656e64 0x766f74655f63686f696365 0x796573
+intcblock 0 1 5
+bytecblock 0x766f74655f616d6f756e74 0x766f74655f636f756e74 0x766f74655f63686f696365 0x7265675f626567696e 0x7265675f656e64 0x796573 0x766f74655f626567696e 0x766f74655f656e64 0x
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l10
+bnz main_l8
 txna ApplicationArgs 0
 pushbytes 0x2ff574e9 // "create(uint64,uint64,uint64,uint64)void"
 ==
-bnz main_l9
+bnz main_l7
 txna ApplicationArgs 0
 pushbytes 0xd1bd2736 // "cast_vote(string)void"
 ==
-bnz main_l8
+bnz main_l6
 txna ApplicationArgs 0
 pushbytes 0x1d5987db // "upvote()void"
 ==
-bnz main_l7
-txna ApplicationArgs 0
-pushbytes 0xc95bc0d3 // "downvote()void"
-==
-bnz main_l6
+bnz main_l5
 err
+main_l5:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub upvote_5
+intc_1 // 1
+return
 main_l6:
 txn OnCompletion
 intc_0 // NoOp
@@ -31,35 +39,11 @@ intc_0 // 0
 !=
 &&
 assert
-callsub downvote_5
+txna ApplicationArgs 1
+callsub castvote_4
 intc_1 // 1
 return
 main_l7:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub upvote_4
-intc_1 // 1
-return
-main_l8:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-txna ApplicationArgs 1
-callsub castvote_3
-intc_1 // 1
-return
-main_l9:
 txn OnCompletion
 intc_0 // NoOp
 ==
@@ -84,15 +68,27 @@ load 0
 load 1
 load 2
 load 3
-callsub create_2
+callsub create_3
 intc_1 // 1
 return
-main_l10:
+main_l8:
 txn OnCompletion
 intc_1 // OptIn
 ==
 bnz main_l12
+txn OnCompletion
+pushint 2 // CloseOut
+==
+bnz main_l11
 err
+main_l11:
+txn ApplicationID
+intc_0 // 0
+!=
+assert
+callsub downvote_2
+intc_1 // 1
+return
 main_l12:
 txn ApplicationID
 intc_0 // 0
@@ -105,22 +101,22 @@ return
 // register
 register_0:
 global Round
-bytec_0 // "reg_begin"
+bytec_3 // "reg_begin"
 app_global_get
 >=
 global Round
-bytec_1 // "reg_end"
+bytec 4 // "reg_end"
 app_global_get
 <=
 &&
 assert
 txn Sender
-pushbytes 0x766f74655f616d6f756e74 // "vote_amount"
+bytec_0 // "vote_amount"
 intc_0 // 0
 app_local_put
 txn Sender
-bytec 4 // "vote_choice"
-pushbytes 0x // ""
+bytec_2 // "vote_choice"
+bytec 8 // ""
 app_local_put
 retsub
 
@@ -130,61 +126,88 @@ global CurrentApplicationID
 app_opted_in
 retsub
 
+// downvote
+downvote_2:
+txn Sender
+bytec_2 // "vote_choice"
+app_local_get
+bytec 5 // "yes"
+==
+bz downvote_2_l2
+bytec_1 // "vote_count"
+bytec_1 // "vote_count"
+app_global_get
+txn Sender
+bytec_0 // "vote_amount"
+app_local_get
+-
+app_global_put
+txn Sender
+bytec_0 // "vote_amount"
+intc_0 // 0
+app_local_put
+downvote_2_l2:
+txn Sender
+bytec_2 // "vote_choice"
+bytec 8 // ""
+app_local_put
+retsub
+
 // create
-create_2:
+create_3:
 store 7
 store 6
 store 5
 store 4
-bytec_0 // "reg_begin"
+bytec_3 // "reg_begin"
 load 4
 app_global_put
-bytec_1 // "reg_end"
+bytec 4 // "reg_end"
 load 5
 app_global_put
-bytec_2 // "vote_begin"
+bytec 6 // "vote_begin"
 load 6
 app_global_put
-bytec_3 // "vote_end"
+bytec 7 // "vote_end"
 load 7
 app_global_put
-pushbytes 0x766f74655f636f756e74 // "vote_count"
+bytec_1 // "vote_count"
 intc_0 // 0
 app_global_put
-bytec_0 // "reg_begin"
+bytec_3 // "reg_begin"
 intc_0 // 0
 app_global_put
-bytec_1 // "reg_end"
+bytec 4 // "reg_end"
 intc_0 // 0
 app_global_put
-bytec_2 // "vote_begin"
+bytec 6 // "vote_begin"
 intc_0 // 0
 app_global_put
-bytec_3 // "vote_end"
+bytec 7 // "vote_end"
 intc_0 // 0
 app_global_put
 retsub
 
 // cast_vote
-castvote_3:
+castvote_4:
 store 8
 txn Sender
 callsub authoptedin_1
 // unauthorized
 assert
 txn Sender
-pushint 5 // 5
+intc_2 // 5
 asset_holding_get AssetBalance
 store 10
 store 9
 global Round
-bytec_2 // "vote_begin"
+bytec 6 // "vote_begin"
 app_global_get
 >=
 // Ensure that voting can only take place within voting window
 assert
 global Round
-bytec_3 // "vote_end"
+bytec 7 // "vote_end"
 app_global_get
 <=
 // Ensure that voting can only take place within voting window
@@ -212,7 +235,7 @@ bytec 5 // "yes"
 ||
 assert
 txn Sender
-bytec 4 // "vote_choice"
+bytec_2 // "vote_choice"
 load 8
 extract 2 0
 app_local_put
@@ -220,14 +243,44 @@ load 8
 extract 2 0
 bytec 5 // "yes"
 ==
-bnz castvote_3_l1
-castvote_3_l1:
+bz castvote_4_l2
+txn Sender
+intc_2 // 5
+asset_holding_get AssetBalance
+store 12
+store 11
+txn Sender
+bytec_0 // "vote_amount"
+load 11
+app_local_put
+bytec_1 // "vote_count"
+bytec_1 // "vote_count"
+app_global_get
+txn Sender
+bytec_0 // "vote_amount"
+app_local_get
++
+app_global_put
+castvote_4_l2:
 retsub
 
 // upvote
-upvote_4:
-retsub
-
-// downvote
-downvote_5:
+upvote_5:
+txn Sender
+intc_2 // 5
+asset_holding_get AssetBalance
+store 14
+store 13
+txn Sender
+bytec_0 // "vote_amount"
+load 13
+app_local_put
+bytec_1 // "vote_count"
+bytec_1 // "vote_count"
+app_global_get
+txn Sender
+bytec_0 // "vote_amount"
+app_local_get
++
+app_global_put
 retsub

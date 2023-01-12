@@ -102,13 +102,20 @@ class VotingApp(Application):
     @internal
     def upvote(self):
         return Seq(
-
+            (bal := AssetHolding.balance(account=Txn.sender(), asset=self.AID)),
+            self.vote_amount.set(bal.value()),
+            self.vote_count.set(self.vote_count + self.vote_amount)
         )
 
-    @internal
+    @bare_external(clear_state=CallConfig.CALL, close_out=CallConfig.CALL)
     def downvote(self):
         return Seq(
-
+            If (self.vote_choice == Bytes("yes"))
+            .Then(
+                self.vote_count.set(self.vote_count - self.vote_amount),
+                self.vote_amount.set(Int(0))
+            ),
+            self.vote_choice.set(Bytes(""))
         )
 
 
