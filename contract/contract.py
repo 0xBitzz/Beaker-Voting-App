@@ -13,6 +13,9 @@ from beaker import (
 )
 
 
+# TODO: Properly comment on assertions
+# TODO: Properly parse in correct ASA ID
+
 class VotingApp(Application):
     vote_amount: Final[AccountStateValue] = AccountStateValue(
         stack_type=TealType.uint64,
