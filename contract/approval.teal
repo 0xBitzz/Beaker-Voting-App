@@ -1,12 +1,65 @@
 #pragma version 8
-intcblock 0
-bytecblock 0x7265675f626567696e 0x7265675f656e64 0x766f74655f626567696e 0x766f74655f656e64
+intcblock 0 1
+bytecblock 0x7265675f626567696e 0x7265675f656e64 0x766f74655f626567696e 0x766f74655f656e64 0x766f74655f63686f696365 0x796573
+txn NumAppArgs
+intc_0 // 0
+==
+bnz main_l10
 txna ApplicationArgs 0
 pushbytes 0x2ff574e9 // "create(uint64,uint64,uint64,uint64)void"
 ==
-bnz main_l2
+bnz main_l9
+txna ApplicationArgs 0
+pushbytes 0xd1bd2736 // "cast_vote(string)void"
+==
+bnz main_l8
+txna ApplicationArgs 0
+pushbytes 0x1d5987db // "upvote()void"
+==
+bnz main_l7
+txna ApplicationArgs 0
+pushbytes 0xc95bc0d3 // "downvote()void"
+==
+bnz main_l6
 err
-main_l2:
+main_l6:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub downvote_5
+intc_1 // 1
+return
+main_l7:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub upvote_4
+intc_1 // 1
+return
+main_l8:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+callsub castvote_3
+intc_1 // 1
+return
+main_l9:
 txn OnCompletion
 intc_0 // NoOp
 ==
@@ -31,12 +84,54 @@ load 0
 load 1
 load 2
 load 3
-callsub create_0
-pushint 1 // 1
+callsub create_2
+intc_1 // 1
+return
+main_l10:
+txn OnCompletion
+intc_1 // OptIn
+==
+bnz main_l12
+err
+main_l12:
+txn ApplicationID
+intc_0 // 0
+!=
+assert
+callsub register_0
+intc_1 // 1
 return
 
+// register
+register_0:
+global Round
+bytec_0 // "reg_begin"
+app_global_get
+>=
+global Round
+bytec_1 // "reg_end"
+app_global_get
+<=
+&&
+assert
+txn Sender
+pushbytes 0x766f74655f616d6f756e74 // "vote_amount"
+intc_0 // 0
+app_local_put
+txn Sender
+bytec 4 // "vote_choice"
+pushbytes 0x // ""
+app_local_put
+retsub
+
+// auth_opted_in
+authoptedin_1:
+global CurrentApplicationID
+app_opted_in
+retsub
+
 // create
-create_0:
+create_2:
 store 7
 store 6
 store 5
@@ -68,4 +163,71 @@ app_global_put
 bytec_3 // "vote_end"
 intc_0 // 0
 app_global_put
+retsub
+
+// cast_vote
+castvote_3:
+store 8
+txn Sender
+callsub authoptedin_1
+// unauthorized
+assert
+txn Sender
+pushint 5 // 5
+asset_holding_get AssetBalance
+store 10
+store 9
+global Round
+bytec_2 // "vote_begin"
+app_global_get
+>=
+// Ensure that voting can only take place within voting window
+assert
+global Round
+bytec_3 // "vote_end"
+app_global_get
+<=
+// Ensure that voting can only take place within voting window
+assert
+load 10
+// Ensure account has opted into the ENB
+assert
+load 9
+pushint 1000 // 1000
+>=
+assert
+load 8
+extract 2 0
+pushbytes 0x6162737461696e // "abstain"
+==
+load 8
+extract 2 0
+pushbytes 0x6e6f // "no"
+==
+||
+load 8
+extract 2 0
+bytec 5 // "yes"
+==
+||
+assert
+txn Sender
+bytec 4 // "vote_choice"
+load 8
+extract 2 0
+app_local_put
+load 8
+extract 2 0
+bytec 5 // "yes"
+==
+bnz castvote_3_l1
+castvote_3_l1:
+retsub
+
+// upvote
+upvote_4:
+retsub
+
+// downvote
+downvote_5:
 retsub
