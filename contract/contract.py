@@ -115,7 +115,8 @@ class VotingApp(Application):
                 self.vote_count.set(self.vote_count - self.vote_amount),
                 self.vote_amount.set(Int(0))
             ),
-            self.vote_choice.set(Bytes(""))
+            self.vote_choice.set(Bytes("")),
+            self.vote_amount.set(Int(0))
         )
 
 
