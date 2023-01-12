@@ -15,6 +15,7 @@ from beaker import (
 
 # TODO: Properly comment on assertions
 # TODO: Properly parse in correct ASA ID
+# TODO: Create interact.py and test app
 
 class VotingApp(Application):
     vote_amount: Final[AccountStateValue] = AccountStateValue(
