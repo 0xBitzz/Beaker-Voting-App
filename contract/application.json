@@ -1,0 +1,84 @@
+{
+    "hints": {},
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAKYnl0ZWNibG9jayAweDcyNjU2NzVmNjI2NTY3Njk2ZSAweDcyNjU2NzVmNjU2ZTY0IDB4NzY2Zjc0NjU1ZjYyNjU2NzY5NmUgMHg3NjZmNzQ2NTVmNjU2ZTY0CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4MmZmNTc0ZTkgLy8gImNyZWF0ZSh1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQpdm9pZCIKPT0KYm56IG1haW5fbDIKZXJyCm1haW5fbDI6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKPT0KJiYKYXNzZXJ0CnR4bmEgQXBwbGljYXRpb25BcmdzIDEKYnRvaQpzdG9yZSAwCnR4bmEgQXBwbGljYXRpb25BcmdzIDIKYnRvaQpzdG9yZSAxCnR4bmEgQXBwbGljYXRpb25BcmdzIDMKYnRvaQpzdG9yZSAyCnR4bmEgQXBwbGljYXRpb25BcmdzIDQKYnRvaQpzdG9yZSAzCmxvYWQgMApsb2FkIDEKbG9hZCAyCmxvYWQgMwpjYWxsc3ViIGNyZWF0ZV8wCnB1c2hpbnQgMSAvLyAxCnJldHVybgoKLy8gY3JlYXRlCmNyZWF0ZV8wOgpzdG9yZSA3CnN0b3JlIDYKc3RvcmUgNQpzdG9yZSA0CmJ5dGVjXzAgLy8gInJlZ19iZWdpbiIKbG9hZCA0CmFwcF9nbG9iYWxfcHV0CmJ5dGVjXzEgLy8gInJlZ19lbmQiCmxvYWQgNQphcHBfZ2xvYmFsX3B1dApieXRlY18yIC8vICJ2b3RlX2JlZ2luIgpsb2FkIDYKYXBwX2dsb2JhbF9wdXQKYnl0ZWNfMyAvLyAidm90ZV9lbmQiCmxvYWQgNwphcHBfZ2xvYmFsX3B1dApwdXNoYnl0ZXMgMHg3NjZmNzQ2NTVmNjM2Zjc1NmU3NCAvLyAidm90ZV9jb3VudCIKaW50Y18wIC8vIDAKYXBwX2dsb2JhbF9wdXQKYnl0ZWNfMCAvLyAicmVnX2JlZ2luIgppbnRjXzAgLy8gMAphcHBfZ2xvYmFsX3B1dApieXRlY18xIC8vICJyZWdfZW5kIgppbnRjXzAgLy8gMAphcHBfZ2xvYmFsX3B1dApieXRlY18yIC8vICJ2b3RlX2JlZ2luIgppbnRjXzAgLy8gMAphcHBfZ2xvYmFsX3B1dApieXRlY18zIC8vICJ2b3RlX2VuZCIKaW50Y18wIC8vIDAKYXBwX2dsb2JhbF9wdXQKcmV0c3Vi",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
+    },
+    "schema": {
+        "local": {
+            "declared": {
+                "vote_amount": {
+                    "type": "uint64",
+                    "key": "vote_amount",
+                    "descr": "Amount an account holds at voting time"
+                },
+                "vote_choice": {
+                    "type": "bytes",
+                    "key": "vote_choice",
+                    "descr": "Choice made by this account, can be either of yes, no, abstain"
+                }
+            },
+            "reserved": {}
+        },
+        "global": {
+            "declared": {
+                "vote_count": {
+                    "type": "uint64",
+                    "key": "vote_count",
+                    "descr": "The accumulated number of votes"
+                },
+                "reg_begin": {
+                    "type": "uint64",
+                    "key": "reg_begin",
+                    "descr": "Registration window begin time"
+                },
+                "reg_end": {
+                    "type": "uint64",
+                    "key": "reg_end",
+                    "descr": "Registration window end time"
+                },
+                "vote_begin": {
+                    "type": "uint64",
+                    "key": "vote_begin",
+                    "descr": "Voting window start time"
+                },
+                "vote_end": {
+                    "type": "uint64",
+                    "key": "vote_end",
+                    "descr": "Voting window end time"
+                }
+            },
+            "reserved": {}
+        }
+    },
+    "contract": {
+        "name": "VotingApp",
+        "methods": [
+            {
+                "name": "create",
+                "args": [
+                    {
+                        "type": "uint64",
+                        "name": "reg_begin"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "reg_end"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "vote_begin"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "vote_end"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            }
+        ],
+        "networks": {}
+    }
+}

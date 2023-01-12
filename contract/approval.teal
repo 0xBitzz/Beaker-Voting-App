@@ -1,0 +1,71 @@
+#pragma version 8
+intcblock 0
+bytecblock 0x7265675f626567696e 0x7265675f656e64 0x766f74655f626567696e 0x766f74655f656e64
+txna ApplicationArgs 0
+pushbytes 0x2ff574e9 // "create(uint64,uint64,uint64,uint64)void"
+==
+bnz main_l2
+err
+main_l2:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+==
+&&
+assert
+txna ApplicationArgs 1
+btoi
+store 0
+txna ApplicationArgs 2
+btoi
+store 1
+txna ApplicationArgs 3
+btoi
+store 2
+txna ApplicationArgs 4
+btoi
+store 3
+load 0
+load 1
+load 2
+load 3
+callsub create_0
+pushint 1 // 1
+return
+
+// create
+create_0:
+store 7
+store 6
+store 5
+store 4
+bytec_0 // "reg_begin"
+load 4
+app_global_put
+bytec_1 // "reg_end"
+load 5
+app_global_put
+bytec_2 // "vote_begin"
+load 6
+app_global_put
+bytec_3 // "vote_end"
+load 7
+app_global_put
+pushbytes 0x766f74655f636f756e74 // "vote_count"
+intc_0 // 0
+app_global_put
+bytec_0 // "reg_begin"
+intc_0 // 0
+app_global_put
+bytec_1 // "reg_end"
+intc_0 // 0
+app_global_put
+bytec_2 // "vote_begin"
+intc_0 // 0
+app_global_put
+bytec_3 // "vote_end"
+intc_0 // 0
+app_global_put
+retsub

@@ -1,0 +1,30 @@
+{
+    "name": "VotingApp",
+    "methods": [
+        {
+            "name": "create",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "reg_begin"
+                },
+                {
+                    "type": "uint64",
+                    "name": "reg_end"
+                },
+                {
+                    "type": "uint64",
+                    "name": "vote_begin"
+                },
+                {
+                    "type": "uint64",
+                    "name": "vote_end"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        }
+    ],
+    "networks": {}
+}
