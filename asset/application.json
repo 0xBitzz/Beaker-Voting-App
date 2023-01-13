@@ -1,0 +1,99 @@
+{
+    "hints": {
+        "read_token_id": {
+            "read_only": true
+        },
+        "read_asset_bal": {
+            "default_arguments": {
+                "asset_id": {
+                    "source": "global-state",
+                    "data": "token_id"
+                }
+            }
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMSA0CmJ5dGVjYmxvY2sgMHg3NDZmNmI2NTZlNWY2OTY0IDB4MTUxZjdjNzUKdHhuIE51bUFwcEFyZ3MKaW50Y18wIC8vIDAKPT0KYm56IG1haW5fbDEyCnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4NTJlMjE1NjggLy8gImNyZWF0ZV9hc3NldChzdHJpbmcsdWludDY0KXZvaWQiCj09CmJueiBtYWluX2wxMQp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweGM5M2JlODAxIC8vICJ0cmFuc2Zlcl9hc3NldCh1aW50NjQsYWRkcmVzcyl2b2lkIgo9PQpibnogbWFpbl9sMTAKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHg3NzhhNjgyOSAvLyAic2VuZF90b19jcmVhdG9yKCl2b2lkIgo9PQpibnogbWFpbl9sOQp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweGE1NmZkNzQzIC8vICJyZWFkX3Rva2VuX2lkKCl1aW50NjQiCj09CmJueiBtYWluX2w4CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4ODJlNTA3MjQgLy8gInJlYWRfYXNzZXRfYmFsKGFzc2V0KXVpbnQ2NCIKPT0KYm56IG1haW5fbDcKZXJyCm1haW5fbDc6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKIT0KJiYKYXNzZXJ0CnR4bmEgQXBwbGljYXRpb25BcmdzIDEKaW50Y18wIC8vIDAKZ2V0Ynl0ZQpjYWxsc3ViIHJlYWRhc3NldGJhbF83CnN0b3JlIDUKYnl0ZWNfMSAvLyAweDE1MWY3Yzc1CmxvYWQgNQppdG9iCmNvbmNhdApsb2cKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDg6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKIT0KJiYKYXNzZXJ0CmNhbGxzdWIgcmVhZHRva2VuaWRfNgpzdG9yZSA0CmJ5dGVjXzEgLy8gMHgxNTFmN2M3NQpsb2FkIDQKaXRvYgpjb25jYXQKbG9nCmludGNfMSAvLyAxCnJldHVybgptYWluX2w5Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIHNlbmR0b2NyZWF0b3JfNQppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sMTA6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKIT0KJiYKYXNzZXJ0CnR4bmEgQXBwbGljYXRpb25BcmdzIDEKYnRvaQpzdG9yZSAyCnR4bmEgQXBwbGljYXRpb25BcmdzIDIKc3RvcmUgMwpsb2FkIDIKbG9hZCAzCmNhbGxzdWIgdHJhbnNmZXJhc3NldF80CmludGNfMSAvLyAxCnJldHVybgptYWluX2wxMToKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQpzdG9yZSAwCnR4bmEgQXBwbGljYXRpb25BcmdzIDIKYnRvaQpzdG9yZSAxCmxvYWQgMApsb2FkIDEKY2FsbHN1YiBjcmVhdGVhc3NldF8zCmludGNfMSAvLyAxCnJldHVybgptYWluX2wxMjoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQpibnogbWFpbl9sMTQKZXJyCm1haW5fbDE0Ogp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAo9PQphc3NlcnQKY2FsbHN1YiBjcmVhdGVfMAppbnRjXzEgLy8gMQpyZXR1cm4KCi8vIGNyZWF0ZQpjcmVhdGVfMDoKaW50Y18xIC8vIDEKcmV0dXJuCgovLyBhdXRoX29ubHkKYXV0aG9ubHlfMToKZ2xvYmFsIENyZWF0b3JBZGRyZXNzCj09CnJldHN1YgoKLy8gYXV0aF9vbmx5CmF1dGhvbmx5XzI6Cmdsb2JhbCBDcmVhdG9yQWRkcmVzcwo9PQpyZXRzdWIKCi8vIGNyZWF0ZV9hc3NldApjcmVhdGVhc3NldF8zOgpzdG9yZSA5CnN0b3JlIDgKdHhuIFNlbmRlcgpjYWxsc3ViIGF1dGhvbmx5XzEKLy8gdW5hdXRob3JpemVkCmFzc2VydAppdHhuX2JlZ2luCnB1c2hpbnQgMyAvLyBhY2ZnCml0eG5fZmllbGQgVHlwZUVudW0KbG9hZCA4CmV4dHJhY3QgMiAwCml0eG5fZmllbGQgQ29uZmlnQXNzZXROYW1lCmxvYWQgOQppdHhuX2ZpZWxkIENvbmZpZ0Fzc2V0VG90YWwKZ2xvYmFsIEN1cnJlbnRBcHBsaWNhdGlvbkFkZHJlc3MKaXR4bl9maWVsZCBDb25maWdBc3NldE1hbmFnZXIKcHVzaGludCAxMDAwIC8vIDEwMDAKaXR4bl9maWVsZCBGZWUKaXR4bl9zdWJtaXQKYnl0ZWNfMCAvLyAidG9rZW5faWQiCml0eG4gQ3JlYXRlZEFzc2V0SUQKYXBwX2dsb2JhbF9wdXQKcmV0c3ViCgovLyB0cmFuc2Zlcl9hc3NldAp0cmFuc2ZlcmFzc2V0XzQ6CnN0b3JlIDExCnN0b3JlIDEwCml0eG5fYmVnaW4KaW50Y18yIC8vIGF4ZmVyCml0eG5fZmllbGQgVHlwZUVudW0KbG9hZCAxMQppdHhuX2ZpZWxkIEFzc2V0UmVjZWl2ZXIKYnl0ZWNfMCAvLyAidG9rZW5faWQiCmFwcF9nbG9iYWxfZ2V0Cml0eG5fZmllbGQgWGZlckFzc2V0CmxvYWQgMTAKaXR4bl9maWVsZCBBbW91bnQKaXR4bl9zdWJtaXQKcmV0c3ViCgovLyBzZW5kX3RvX2NyZWF0b3IKc2VuZHRvY3JlYXRvcl81Ogp0eG4gU2VuZGVyCmNhbGxzdWIgYXV0aG9ubHlfMgovLyB1bmF1dGhvcml6ZWQKYXNzZXJ0Cmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25BZGRyZXNzCmJ5dGVjXzAgLy8gInRva2VuX2lkIgphcHBfZ2xvYmFsX2dldAphc3NldF9ob2xkaW5nX2dldCBBc3NldEJhbGFuY2UKc3RvcmUgMTMKc3RvcmUgMTIKbG9hZCAxMgppbnRjXzAgLy8gMAo+CmFzc2VydAp0eG4gU2VuZGVyCnN0b3JlIDE0CmxvYWQgMTQKbGVuCnB1c2hpbnQgMzIgLy8gMzIKPT0KYXNzZXJ0CmxvYWQgMTIKc3RvcmUgMTUKaXR4bl9iZWdpbgppbnRjXzIgLy8gYXhmZXIKaXR4bl9maWVsZCBUeXBlRW51bQpsb2FkIDE0Cml0eG5fZmllbGQgQXNzZXRSZWNlaXZlcgpieXRlY18wIC8vICJ0b2tlbl9pZCIKYXBwX2dsb2JhbF9nZXQKaXR4bl9maWVsZCBYZmVyQXNzZXQKbG9hZCAxNQppdHhuX2ZpZWxkIEFtb3VudAppdHhuX3N1Ym1pdApyZXRzdWIKCi8vIHJlYWRfdG9rZW5faWQKcmVhZHRva2VuaWRfNjoKYnl0ZWNfMCAvLyAidG9rZW5faWQiCmFwcF9nbG9iYWxfZ2V0CnJldHN1YgoKLy8gcmVhZF9hc3NldF9iYWwKcmVhZGFzc2V0YmFsXzc6CnN0b3JlIDYKZ2xvYmFsIEN1cnJlbnRBcHBsaWNhdGlvbkFkZHJlc3MKbG9hZCA2CnR4bmFzIEFzc2V0cwphc3NldF9ob2xkaW5nX2dldCBBc3NldEJhbGFuY2UKc3RvcmUgNwpyZXRzdWI=",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
+    },
+    "schema": {
+        "local": {
+            "declared": {},
+            "reserved": {}
+        },
+        "global": {
+            "declared": {
+                "token_id": {
+                    "type": "uint64",
+                    "key": "token_id",
+                    "descr": "Token ID"
+                }
+            },
+            "reserved": {}
+        }
+    },
+    "contract": {
+        "name": "Asset",
+        "methods": [
+            {
+                "name": "create_asset",
+                "args": [
+                    {
+                        "type": "string",
+                        "name": "token_name"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "total_supply"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "transfer_asset",
+                "args": [
+                    {
+                        "type": "uint64",
+                        "name": "amount"
+                    },
+                    {
+                        "type": "address",
+                        "name": "receiver"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "send_to_creator",
+                "args": [],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "read_token_id",
+                "args": [],
+                "returns": {
+                    "type": "uint64"
+                }
+            },
+            {
+                "name": "read_asset_bal",
+                "args": [
+                    {
+                        "type": "asset",
+                        "name": "asset_id"
+                    }
+                ],
+                "returns": {
+                    "type": "uint64"
+                }
+            }
+        ],
+        "networks": {}
+    }
+}
