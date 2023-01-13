@@ -14,7 +14,7 @@ from beaker import (
 
 
 # TODO: Properly comment on assertions
-# TODO: Properly parse in correct ASA ID
+# TODO: Properly pass in correct ASA ID
 # TODO: Create interact.py and test app
 
 class VotingApp(Application):
@@ -119,8 +119,7 @@ class VotingApp(Application):
                 self.vote_count.set(self.vote_count - self.vote_amount),
                 self.vote_amount.set(Int(0))
             ),
-            self.vote_choice.set(Bytes("")),
-            self.vote_amount.set(Int(0))
+            self.vote_choice.set(Bytes(""))
         )
 
 
