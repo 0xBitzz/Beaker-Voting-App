@@ -9,7 +9,7 @@ from beaker import (
     external,
     internal,
     create,
-    opt_in
+    opt_in,
 )
 
 
@@ -48,10 +48,7 @@ class Asset(Application):
     @external(authorize=Authorize.only(Global.creator_address()))
     def send_to_creator(self):
         return Seq(
-            (bal := AssetHolding.balance(
-                account=self.address,
-                asset=self.token_id)
-            ),
+            (bal := AssetHolding.balance(account=self.address, asset=self.token_id)),
             Assert(bal.value() > Int(0)),
             (rcv := abi.Address()).set(Txn.sender()),
             (amt := abi.Uint64()).set(bal.value()),
@@ -59,7 +56,7 @@ class Asset(Application):
         )
 
     @external(read_only=True)
-    def read_token_id(self, *, output: abi.Uint64):
+    def get_token_id(self, *, output: abi.Uint64):
         return output.set(self.token_id)
 
     @external
@@ -71,7 +68,7 @@ class Asset(Application):
     ):
         return Seq(
             (bal := AssetHolding.balance(account=self.address, asset=asset_id.asset_id())),
-            output.set(bal.value()),
+            output.set(bal.value())
         )
 
 

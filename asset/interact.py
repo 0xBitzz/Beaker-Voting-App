@@ -28,7 +28,7 @@ def test_app():
 
     app_client.call(app.create_asset, token_name="ENB", total_supply=1_000_000)
 
-    token_id = app_client.call(app.read_token_id).return_value
+    token_id = app_client.call(app.get_token_id).return_value
 
     print(f"App addr: {app_addr}")
 
