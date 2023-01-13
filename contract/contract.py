@@ -13,7 +13,6 @@ from beaker import (
 )
 
 
-# TODO: Properly comment on assertions
 # TODO: Properly pass in correct ASA ID
 # TODO: Create interact.py and test app
 
@@ -71,7 +70,8 @@ class VotingApp(Application):
                 And(
                     Global.round() >= self.reg_begin,
                     Global.round() <= self.reg_end
-                )
+                ),
+                comment="Ensure that registration can only take place within registration window"
             ),
             self.initialize_account_state()
         )
@@ -87,17 +87,16 @@ class VotingApp(Application):
             ),
             Assert(
                 bal.hasValue(),
-                comment="Ensure account has opted into the ENB"
-            ),
-            Assert(
-                bal.value() >= self.MIN_VOTE_AMOUNT
+                bal.value() >= self.MIN_VOTE_AMOUNT,
+                comment="Ensure account has opted into the ENB and account holds up to 1000 ENB"
             ),
             Assert(
                 Or(
                     vote_choice.get() == Bytes("abstain"),
                     vote_choice.get() == Bytes("no"),
                     vote_choice.get() == Bytes("yes")
-                )
+                ),
+                comment="Ensure vote choice must be either of abstain, no, or yes"
             ),
             self.vote_choice.set(vote_choice.get()),
             If (vote_choice.get() == Bytes("yes"), self.upvote())
