@@ -24,13 +24,12 @@ class Asset(Application):
     def create_asset(self, token_name: abi.String, total_supply: abi.Uint64):
         return Seq(
             InnerTxnBuilder.Execute({
-                    TxnField.type_enum: TxnType.AssetConfig,
-                    TxnField.config_asset_name: token_name.get(),
-                    TxnField.config_asset_total: total_supply.get(),
-                    TxnField.config_asset_manager: self.address,
-                    TxnField.fee: self.FEE
-                    }
-            ),
+                TxnField.type_enum: TxnType.AssetConfig,
+                TxnField.config_asset_name: token_name.get(),
+                TxnField.config_asset_total: total_supply.get(),
+                TxnField.config_asset_manager: self.address,
+                TxnField.fee: self.FEE
+            }),
             self.token_id.set(InnerTxn.created_asset_id()),
         )
 
@@ -41,7 +40,8 @@ class Asset(Application):
                 TxnField.type_enum: TxnType.AssetTransfer,
                 TxnField.asset_receiver: receiver.get(),
                 TxnField.xfer_asset: self.token_id,
-                TxnField.amount: amount.get()
+                TxnField.amount: amount.get(),
+                TxnField.fee: self.FEE
             })
         )
 
