@@ -65,12 +65,8 @@ def test_app():
     app_client.call(app.transfer_asset, receiver=acct2.address, amount=2000)
 
     # After transfer
-    print(
-        f"Total ENB holding of escrow account after transfer: {app_client.call(app.get_asset_bal, account=app_addr).return_value:,}")
-
-    print(
-        f"Total ENB holdings of account 1 after transfer: {app_client.call(app.get_asset_bal, account=acct1.address).return_value:,}")
-
+    print(f"Total ENB holding of escrow account after transfer: {app_client.call(app.get_asset_bal, account=app_addr).return_value:,}")
+    print(f"Total ENB holdings of account 1 after transfer: {app_client.call(app.get_asset_bal, account=acct1.address).return_value:,}")
     print(f"Total ENB holdings of account 2 after transfer: {app_client.call(app.get_asset_bal, account=acct2.address).return_value:,}\n")
 
     time_diff = 30
@@ -93,6 +89,7 @@ def test_app():
 
     print(f"Account 1 vote choice: {acct1_app_client.get_account_state()['vote_choice']}")
     print(f"Account 2 vote choice: {acct2_app_client.get_account_state()['vote_choice']}\n")
+    
     print(f"Account 1 vote amount: {acct1_app_client.get_account_state()['vote_amount']}")
     print(f"Account 2 vote amount: {acct2_app_client.get_account_state()['vote_amount']}\n")
     
