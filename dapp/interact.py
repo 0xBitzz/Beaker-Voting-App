@@ -1,5 +1,5 @@
 import time
-from contract import Asset
+from contract import Vote
 from beaker import sandbox
 from beaker.client import ApplicationClient
 from beaker.client.api_providers import AlgoNode, Network
@@ -14,7 +14,7 @@ creator_account = accts.pop()
 acct1 = accts.pop()
 acct2 = accts.pop()
 
-app = Asset()
+app = Vote()
 
 app_client = ApplicationClient(client=client, app=app, signer=creator_account.signer)
 
@@ -23,7 +23,9 @@ def test_app():
     sp = client.suggested_params()
 
     app_id, app_addr, txid = app_client.create()
-    print(f"App created with app id: {app_id} and app addr: {app_addr} and signed with: {txid}\n")
+    print(
+        f"App created with app id: {app_id} and app addr: {app_addr} and signed with: {txid}\n"
+    )
 
     app_client.fund(amt=1_000_000, addr=app_addr)
     app_client.fund(amt=1_000_000, addr=acct1.address)
@@ -35,43 +37,57 @@ def test_app():
     print(f"Asset ID: {asset_id}\n")
 
     print(
-        f"Total ENB holdings of escrow account before transfer: {app_client.call(app.get_asset_bal, account=app_addr).return_value:,}")
+        f"Total ENB holdings of escrow account before transfer: {app_client.call(app.get_asset_bal, account=app_addr).return_value:,}"
+    )
 
     # Acct 1
     acct1_app_client = app_client.prepare(signer=acct1.signer)
     txn1 = TransactionWithSigner(
         txn=AssetTransferTxn(
-            sender=acct1.address, sp=sp,
-            receiver=acct1.address, amt=0, index=asset_id
+            sender=acct1.address, sp=sp, receiver=acct1.address, amt=0, index=asset_id
         ),
-        signer=acct1.signer
+        signer=acct1.signer,
     )
     acct1_app_client.call(app.optin_asset, txn=txn1)
     print(
-        f"Total ENB holdings of account 1 before transfer: {app_client.call(app.get_asset_bal, account=acct1.address).return_value:,}")
+        f"Total ENB holdings of account 1 before transfer: {app_client.call(app.get_asset_bal, account=acct1.address).return_value:,}"
+    )
     app_client.call(app.transfer_asset, receiver=acct1.address, amount=1_000)
 
     # Acct 2
     acct2_app_client = app_client.prepare(signer=acct2.signer)
     txn2 = TransactionWithSigner(
         txn=AssetTransferTxn(
-            sender=acct2.address, sp=sp,
-            receiver=acct2.address, amt=0, index=asset_id
+            sender=acct2.address, sp=sp, receiver=acct2.address, amt=0, index=asset_id
         ),
-        signer=acct2.signer
+        signer=acct2.signer,
     )
     acct2_app_client.call(app.optin_asset, txn=txn2)
-    print(f"Total ENB holdings of account 2 before transfer: {app_client.call(app.get_asset_bal, account=acct2.address).return_value:,}\n")
+    print(
+        f"Total ENB holdings of account 2 before transfer: {app_client.call(app.get_asset_bal, account=acct2.address).return_value:,}\n"
+    )
     app_client.call(app.transfer_asset, receiver=acct2.address, amount=2000)
 
     # After transfer
-    print(f"Total ENB holding of escrow account after transfer: {app_client.call(app.get_asset_bal, account=app_addr).return_value:,}")
-    print(f"Total ENB holdings of account 1 after transfer: {app_client.call(app.get_asset_bal, account=acct1.address).return_value:,}")
-    print(f"Total ENB holdings of account 2 after transfer: {app_client.call(app.get_asset_bal, account=acct2.address).return_value:,}\n")
+    print(
+        f"Total ENB holding of escrow account after transfer: {app_client.call(app.get_asset_bal, account=app_addr).return_value:,}"
+    )
+    print(
+        f"Total ENB holdings of account 1 after transfer: {app_client.call(app.get_asset_bal, account=acct1.address).return_value:,}"
+    )
+    print(
+        f"Total ENB holdings of account 2 after transfer: {app_client.call(app.get_asset_bal, account=acct2.address).return_value:,}\n"
+    )
 
     time_diff = 30
 
-    app_client.call(app.setup, reg_begin=0, reg_end=time_diff, vote_begin=time_diff + 2, vote_end=time_diff + 360)
+    app_client.call(
+        app.setup,
+        reg_begin=0,
+        reg_end=time_diff,
+        vote_begin=time_diff + 2,
+        vote_end=time_diff + 360,
+    )
 
     acct1_app_client.opt_in()
     acct2_app_client.opt_in()
@@ -87,12 +103,20 @@ def test_app():
     acct1_app_client.call(app.cast_vote, choice="yes")
     acct2_app_client.call(app.cast_vote, choice="yes")
 
-    print(f"Account 1 vote choice: {acct1_app_client.get_account_state()['vote_choice']}")
-    print(f"Account 2 vote choice: {acct2_app_client.get_account_state()['vote_choice']}\n")
-    
-    print(f"Account 1 vote amount: {acct1_app_client.get_account_state()['vote_amount']}")
-    print(f"Account 2 vote amount: {acct2_app_client.get_account_state()['vote_amount']}\n")
-    
+    print(
+        f"Account 1 vote choice: {acct1_app_client.get_account_state()['vote_choice']}"
+    )
+    print(
+        f"Account 2 vote choice: {acct2_app_client.get_account_state()['vote_choice']}\n"
+    )
+
+    print(
+        f"Account 1 vote amount: {acct1_app_client.get_account_state()['vote_amount']}"
+    )
+    print(
+        f"Account 2 vote amount: {acct2_app_client.get_account_state()['vote_amount']}\n"
+    )
+
     print(f"Total vote count: {app_client.get_application_state()['vote_count']}\n")
 
     acct1_app_client.close_out()
@@ -104,7 +128,9 @@ def test_app():
 
     print("Account 1 closes out of app\n")
 
-    print(f"Total vote count after account 1 closes out: {app_client.get_application_state()['vote_count']}")
+    print(
+        f"Total vote count after account 1 closes out: {app_client.get_application_state()['vote_count']}"
+    )
 
 
 test_app()
