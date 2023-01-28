@@ -20,23 +20,23 @@ class Vote(Application):
     is_registered: Final[AccountStateValue] = AccountStateValue(
         stack_type=TealType.uint64,
         default=Int(0),
-        descr="Flag to know if an account can vote or not, 1 - True, 0 - False",
+        descr="Flag to know if an account can vote or not, 1 - True, 0 - False"
     )
     vote_amount: Final[AccountStateValue] = AccountStateValue(
         stack_type=TealType.uint64,
         default=Int(0),
-        descr="Amount an account holds at voting time",
+        descr="Amount an account holds at voting time"
     )
     vote_choice: Final[AccountStateValue] = AccountStateValue(
         stack_type=TealType.bytes,
         default=Bytes(""),
-        descr="Choice made by this account, can be either of yes, no, abstain",
+        descr="Choice made by this account, can be either of yes, no, abstain"
     )
 
     vote_count: Final[ApplicationStateValue] = ApplicationStateValue(
         stack_type=TealType.uint64,
         default=Int(0),
-        descr="The accumulated number of votes",
+        descr="The accumulated number of votes"
     )
     reg_begin: Final[ApplicationStateValue] = ApplicationStateValue(
         stack_type=TealType.uint64, descr="Registration window begin time"
@@ -52,7 +52,6 @@ class Vote(Application):
     )
 
     MIN_VOTE_AMOUNT = Int(1_000)
-
     FEE = Int(1_000)
 
     # Asset
@@ -65,7 +64,7 @@ class Vote(Application):
                     TxnField.config_asset_name: asset_name.get(),
                     TxnField.config_asset_total: total_supply.get(),
                     TxnField.config_asset_manager: self.address,
-                    TxnField.fee: self.FEE,
+                    TxnField.fee: self.FEE
                 }
             ),
             self.asset_id.set(InnerTxn.created_asset_id())
@@ -75,14 +74,14 @@ class Vote(Application):
     def optin_asset(
         self,
         txn: abi.AssetTransferTransaction,
-        aid: abi.Asset = asset_id,  # type: ignore[assignment]
+        aid: abi.Asset = asset_id  # type: ignore[assignment]
     ):
         return Seq(
             Assert(
                 txn.get().sender() == Txn.sender(),
                 txn.get().asset_amount() == Int(0),
                 txn.get().asset_receiver() == Txn.sender(),
-                txn.get().xfer_asset() == self.asset_id,
+                txn.get().xfer_asset() == self.asset_id
             )
         )
 
@@ -91,7 +90,7 @@ class Vote(Application):
         self,
         receiver: abi.Account,
         amount: abi.Uint64,
-        aid: abi.Asset = asset_id,  # type: ignore[assignment]
+        aid: abi.Asset = asset_id  # type: ignore[assignment]
     ):
         return Seq(
             (bal := AssetHolding.balance(account=self.address, asset=self.asset_id)),
@@ -108,7 +107,7 @@ class Vote(Application):
                     TxnField.xfer_asset: self.asset_id,
                     TxnField.asset_amount: amount.get(),
                     TxnField.asset_receiver: receiver.address(),
-                    TxnField.fee: self.FEE,
+                    TxnField.fee: self.FEE
                 }
             )
         )
@@ -119,7 +118,7 @@ class Vote(Application):
         account: abi.Account,
         asset_id: abi.Asset = asset_id,  # type: ignore[assignment]
         *,
-        output: abi.Uint64,
+        output: abi.Uint64
     ):
         return Seq(
             (
@@ -141,7 +140,7 @@ class Vote(Application):
         reg_begin: abi.Uint64,
         reg_end: abi.Uint64,
         vote_begin: abi.Uint64,
-        vote_end: abi.Uint64,
+        vote_end: abi.Uint64
     ):
         return Seq(
             self.reg_begin.set(Global.latest_timestamp() + reg_begin.get()),
@@ -169,21 +168,21 @@ class Vote(Application):
             Assert(
                 And(
                     Global.latest_timestamp() >= self.vote_begin.get(),
-                    Global.latest_timestamp() <= self.vote_end.get(),
+                    Global.latest_timestamp() <= self.vote_end.get()
                 )
             ),
             Assert(
                 And(
                     bal.hasValue(),
-                    bal.value() >= self.MIN_VOTE_AMOUNT,
-                ),
+                    bal.value() >= self.MIN_VOTE_AMOUNT
+                )
             ),
             (amt := abi.Uint64()).set(bal.value()),
             Assert(
                 Or(
                     choice.get() == Bytes("yes"),
                     choice.get() == Bytes("no"),
-                    choice.get() == Bytes("abstain"),
+                    choice.get() == Bytes("abstain")
                 )
             ),
             self.vote_choice.set(choice.get()),
@@ -203,7 +202,7 @@ class Vote(Application):
             If(self.vote_choice.get() == Bytes("yes"))
             .Then(
                 self.vote_count.set(self.vote_count - self.vote_amount),
-                self.vote_amount.set(Int(0)),
+                self.vote_amount.set(Int(0))
             ),
             self.vote_choice.set(Bytes(""))
         )

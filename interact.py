@@ -92,7 +92,9 @@ def test_app():
     )
 
     acct1_app_client.opt_in()
+    print("Account 1 registered successfully")
     acct2_app_client.opt_in()
+    print("Account 2 registered successfully\n")
 
     print(f"Account 1 state: {acct1_app_client.get_account_state()}")
     print(f"Account 2 state: {acct2_app_client.get_account_state()}")
@@ -123,15 +125,15 @@ def test_app():
 
     acct1_app_client.close_out()
 
+    print("Account 1 closes out of app")
+
     try:
         acct1_app_client.get_account_state()
     except AlgodHTTPError as e:
         print(f"Successfully closed out: {e}")
 
-    print("Account 1 closes out of app\n")
-
     print(
-        f"Total vote count after account 1 closes out: {app_client.get_application_state()['vote_count']}"
+        f"\nTotal vote count after account 1 closes out: {app_client.get_application_state()['vote_count']}"
     )
 
 
