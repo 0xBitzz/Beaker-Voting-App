@@ -1,5 +1,5 @@
 {
-    "name": "Asset",
+    "name": "Vote",
     "methods": [
         {
             "name": "create_asset",
@@ -118,7 +118,12 @@
         },
         {
             "name": "upvote",
-            "args": [],
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "amount"
+                }
+            ],
             "returns": {
                 "type": "void"
             }

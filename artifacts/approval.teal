@@ -1,6 +1,6 @@
 #pragma version 8
 intcblock 0 1 1000 4
-bytecblock 0x61737365745f6964 0x766f74655f616d6f756e74 0x766f74655f636f756e74 0x766f74655f63686f696365 0x7265675f626567696e 0x69735f72656769737465726564 0x796573 0x151f7c75 0x7265675f656e64 0x 0x766f74655f626567696e 0x766f74655f656e64
+bytecblock 0x766f74655f616d6f756e74 0x61737365745f6964 0x766f74655f636f756e74 0x766f74655f63686f696365 0x69735f72656769737465726564 0x796573 0x151f7c75 0x7265675f626567696e 0x7265675f656e64 0x 0x766f74655f626567696e 0x766f74655f656e64
 txn NumAppArgs
 intc_0 // 0
 ==
@@ -34,7 +34,7 @@ pushbytes 0xa0a9d8db // "cast_vote(string,asset)void"
 ==
 bnz main_l11
 txna ApplicationArgs 0
-pushbytes 0x1d5987db // "upvote()void"
+pushbytes 0xfdf45d9d // "upvote(uint64)void"
 ==
 bnz main_l10
 err
@@ -47,6 +47,8 @@ intc_0 // 0
 !=
 &&
 assert
+txna ApplicationArgs 1
+btoi
 callsub upvote_14
 intc_1 // 1
 return
@@ -109,7 +111,7 @@ intc_0 // 0
 assert
 callsub getassetid_11
 store 12
-bytec 7 // 0x151f7c75
+bytec 6 // 0x151f7c75
 load 12
 itob
 concat
@@ -137,7 +139,7 @@ load 7
 load 8
 callsub getassetbal_10
 store 9
-bytec 7 // 0x151f7c75
+bytec 6 // 0x151f7c75
 load 9
 itob
 concat
@@ -281,7 +283,7 @@ retsub
 // register
 register_4:
 global LatestTimestamp
-bytec 4 // "reg_begin"
+bytec 7 // "reg_begin"
 app_global_get
 >=
 assert
@@ -291,11 +293,11 @@ app_global_get
 <=
 assert
 txn Sender
-bytec 5 // "is_registered"
+bytec 4 // "is_registered"
 intc_0 // 0
 app_local_put
 txn Sender
-bytec_1 // "vote_amount"
+bytec_0 // "vote_amount"
 intc_0 // 0
 app_local_put
 txn Sender
@@ -303,7 +305,7 @@ bytec_3 // "vote_choice"
 bytec 9 // ""
 app_local_put
 txn Sender
-bytec 5 // "is_registered"
+bytec 4 // "is_registered"
 intc_1 // 1
 app_local_put
 retsub
@@ -319,19 +321,19 @@ clearvote_6:
 txn Sender
 bytec_3 // "vote_choice"
 app_local_get
-bytec 6 // "yes"
+bytec 5 // "yes"
 ==
 bz clearvote_6_l2
 bytec_2 // "vote_count"
 bytec_2 // "vote_count"
 app_global_get
 txn Sender
-bytec_1 // "vote_amount"
+bytec_0 // "vote_amount"
 app_local_get
 -
 app_global_put
 txn Sender
-bytec_1 // "vote_amount"
+bytec_0 // "vote_amount"
 intc_0 // 0
 app_local_put
 clearvote_6_l2:
@@ -362,7 +364,7 @@ itxn_field ConfigAssetManager
 intc_2 // 1000
 itxn_field Fee
 itxn_submit
-bytec_0 // "asset_id"
+bytec_1 // "asset_id"
 itxn CreatedAssetID
 app_global_put
 retsub
@@ -388,7 +390,7 @@ txn Sender
 assert
 load 21
 gtxns XferAsset
-bytec_0 // "asset_id"
+bytec_1 // "asset_id"
 app_global_get
 ==
 assert
@@ -404,7 +406,7 @@ callsub authonly_2
 // unauthorized
 assert
 global CurrentApplicationAddress
-bytec_0 // "asset_id"
+bytec_1 // "asset_id"
 app_global_get
 asset_holding_get AssetBalance
 store 27
@@ -421,7 +423,7 @@ assert
 itxn_begin
 intc_3 // axfer
 itxn_field TypeEnum
-bytec_0 // "asset_id"
+bytec_1 // "asset_id"
 app_global_get
 itxn_field XferAsset
 load 24
@@ -438,7 +440,7 @@ retsub
 getassetbal_10:
 store 10
 txnas Accounts
-bytec_0 // "asset_id"
+bytec_1 // "asset_id"
 app_global_get
 asset_holding_get AssetBalance
 store 11
@@ -446,7 +448,7 @@ retsub
 
 // get_asset_id
 getassetid_11:
-bytec_0 // "asset_id"
+bytec_1 // "asset_id"
 app_global_get
 retsub
 
@@ -460,13 +462,10 @@ txn Sender
 callsub authonly_3
 // unauthorized
 assert
-bytec 4 // "reg_begin"
+bytec 7 // "reg_begin"
 global LatestTimestamp
 load 28
 +
-app_global_put
-bytec 4 // "reg_begin"
-global LatestTimestamp
 app_global_put
 bytec 8 // "reg_end"
 global LatestTimestamp
@@ -494,22 +493,16 @@ callsub authoptedin_5
 // unauthorized
 assert
 txn Sender
-bytec_0 // "asset_id"
+bytec_1 // "asset_id"
 app_global_get
 asset_holding_get AssetBalance
 store 35
 store 34
 txn Sender
-bytec 5 // "is_registered"
+bytec 4 // "is_registered"
 app_local_get
 intc_1 // 1
 ==
-assert
-load 35
-load 34
-intc_2 // 1000
->=
-&&
 assert
 global LatestTimestamp
 bytec 10 // "vote_begin"
@@ -521,9 +514,17 @@ app_global_get
 <=
 &&
 assert
+load 35
+load 34
+intc_2 // 1000
+>=
+&&
+assert
+load 34
+store 36
 load 32
 extract 2 0
-bytec 6 // "yes"
+bytec 5 // "yes"
 ==
 load 32
 extract 2 0
@@ -543,24 +544,18 @@ extract 2 0
 app_local_put
 load 32
 extract 2 0
-bytec 6 // "yes"
+bytec 5 // "yes"
 ==
 bz castvote_13_l2
 txn Sender
-bytec_0 // "asset_id"
-app_global_get
-asset_holding_get AssetBalance
-store 37
-store 36
-txn Sender
-bytec_1 // "vote_amount"
+bytec_0 // "vote_amount"
 load 36
 app_local_put
 bytec_2 // "vote_count"
 bytec_2 // "vote_count"
 app_global_get
 txn Sender
-bytec_1 // "vote_amount"
+bytec_0 // "vote_amount"
 app_local_get
 +
 app_global_put
@@ -569,21 +564,16 @@ retsub
 
 // upvote
 upvote_14:
+store 37
 txn Sender
-bytec_0 // "asset_id"
-app_global_get
-asset_holding_get AssetBalance
-store 39
-store 38
-txn Sender
-bytec_1 // "vote_amount"
-load 38
+bytec_0 // "vote_amount"
+load 37
 app_local_put
 bytec_2 // "vote_count"
 bytec_2 // "vote_count"
 app_global_get
 txn Sender
-bytec_1 // "vote_amount"
+bytec_0 // "vote_amount"
 app_local_get
 +
 app_global_put

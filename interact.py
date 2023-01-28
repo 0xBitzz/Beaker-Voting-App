@@ -7,9 +7,11 @@ from algosdk.atomic_transaction_composer import TransactionWithSigner
 from algosdk.future.transaction import AssetTransferTxn
 from algosdk.error import AlgodHTTPError
 
+
 client = AlgoNode(Network.TestNet).algod()
 
 accts = sandbox.get_accounts()
+
 creator_account = accts.pop()
 acct1 = accts.pop()
 acct2 = accts.pop()
@@ -79,7 +81,7 @@ def test_app():
         f"Total ENB holdings of account 2 after transfer: {app_client.call(app.get_asset_bal, account=acct2.address).return_value:,}\n"
     )
 
-    time_diff = 30
+    time_diff = 30 # 30 seconds
 
     app_client.call(
         app.setup,

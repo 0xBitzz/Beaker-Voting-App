@@ -8,7 +8,7 @@ from beaker import (
     bare_external,
     external,
     internal,
-    opt_in,
+    opt_in
 )
 
 
@@ -20,7 +20,7 @@ class Vote(Application):
     is_registered: Final[AccountStateValue] = AccountStateValue(
         stack_type=TealType.uint64,
         default=Int(0),
-        descr="Flag to know if an account can vote or note, 1 - True, 0 - False",
+        descr="Flag to know if an account can vote or not, 1 - True, 0 - False",
     )
     vote_amount: Final[AccountStateValue] = AccountStateValue(
         stack_type=TealType.uint64,
@@ -68,7 +68,7 @@ class Vote(Application):
                     TxnField.fee: self.FEE,
                 }
             ),
-            self.asset_id.set(InnerTxn.created_asset_id()),
+            self.asset_id.set(InnerTxn.created_asset_id())
         )
 
     @external
@@ -96,7 +96,10 @@ class Vote(Application):
         return Seq(
             (bal := AssetHolding.balance(account=self.address, asset=self.asset_id)),
             Assert(
-                And(amount.get() > Int(0), amount.get() <= bal.value()),
+                And(
+                    amount.get() > Int(0),
+                    amount.get() <= bal.value(),
+                ),
                 comment="Ensure amount is valid",
             ),
             InnerTxnBuilder.Execute(
@@ -107,7 +110,7 @@ class Vote(Application):
                     TxnField.asset_receiver: receiver.address(),
                     TxnField.fee: self.FEE,
                 }
-            ),
+            )
         )
 
     @external
@@ -124,7 +127,7 @@ class Vote(Application):
                     account=account.address(), asset=self.asset_id
                 )
             ),
-            output.set(bal.value()),
+            output.set(bal.value())
         )
 
     @external(read_only=True)
@@ -142,10 +145,9 @@ class Vote(Application):
     ):
         return Seq(
             self.reg_begin.set(Global.latest_timestamp() + reg_begin.get()),
-            self.reg_begin.set(Global.latest_timestamp()),
             self.reg_end.set(Global.latest_timestamp() + reg_end.get()),
             self.vote_begin.set(Global.latest_timestamp() + vote_begin.get()),
-            self.vote_end.set(Global.latest_timestamp() + vote_end.get()),
+            self.vote_end.set(Global.latest_timestamp() + vote_end.get())
         )
 
     @opt_in
@@ -156,7 +158,7 @@ class Vote(Application):
                 Global.latest_timestamp() <= self.reg_end,
             ),
             self.initialize_account_state(),
-            self.is_registered.set(Int(1)),
+            self.is_registered.set(Int(1))
         )
 
     @external(authorize=Authorize.opted_in())
@@ -164,13 +166,19 @@ class Vote(Application):
         return Seq(
             (bal := AssetHolding.balance(account=Txn.sender(), asset=self.asset_id)),
             Assert(self.is_registered.get() == Int(1)),
-            Assert(And(bal.hasValue(), bal.value() >= self.MIN_VOTE_AMOUNT)),
             Assert(
                 And(
                     Global.latest_timestamp() >= self.vote_begin.get(),
                     Global.latest_timestamp() <= self.vote_end.get(),
                 )
             ),
+            Assert(
+                And(
+                    bal.hasValue(),
+                    bal.value() >= self.MIN_VOTE_AMOUNT,
+                ),
+            ),
+            (amt := abi.Uint64()).set(bal.value()),
             Assert(
                 Or(
                     choice.get() == Bytes("yes"),
@@ -179,25 +187,25 @@ class Vote(Application):
                 )
             ),
             self.vote_choice.set(choice.get()),
-            If(choice.get() == Bytes("yes"), self.upvote()),
+            If(choice.get() == Bytes("yes"), self.upvote(amount=amt))
         )
 
     @internal
-    def upvote(self):
+    def upvote(self, amount: abi.Uint64):
         return Seq(
-            (bal := AssetHolding.balance(account=Txn.sender(), asset=self.asset_id)),
-            self.vote_amount.set(bal.value()),
-            self.vote_count.set(self.vote_count + self.vote_amount),
+            self.vote_amount.set(amount.get()),
+            self.vote_count.set(self.vote_count + self.vote_amount)
         )
 
     @bare_external(close_out=CallConfig.CALL, clear_state=CallConfig.CALL)
     def clear_vote(self):
         return Seq(
-            If(self.vote_choice.get() == Bytes("yes")).Then(
+            If(self.vote_choice.get() == Bytes("yes"))
+            .Then(
                 self.vote_count.set(self.vote_count - self.vote_amount),
                 self.vote_amount.set(Int(0)),
             ),
-            self.vote_choice.set(Bytes("")),
+            self.vote_choice.set(Bytes(""))
         )
 
 
