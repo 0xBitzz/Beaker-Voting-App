@@ -8,6 +8,7 @@ from beaker import (
     bare_external,
     external,
     internal,
+    create,
     opt_in
 )
 
@@ -134,6 +135,21 @@ class Vote(Application):
         return output.set(self.asset_id.get())
 
     # Vote
+    @create
+    def create(self):
+        return self.initialize_application_state()
+
+    @opt_in
+    def register(self):
+        return Seq(
+            Assert(
+                Global.latest_timestamp() >= self.reg_begin,
+                Global.latest_timestamp() <= self.reg_end,
+            ),
+            self.initialize_account_state(),
+            self.is_registered.set(Int(1))
+        )
+
     @external(authorize=Authorize.only(Global.creator_address()))
     def setup(
         self,
@@ -147,17 +163,6 @@ class Vote(Application):
             self.reg_end.set(Global.latest_timestamp() + reg_end.get()),
             self.vote_begin.set(Global.latest_timestamp() + vote_begin.get()),
             self.vote_end.set(Global.latest_timestamp() + vote_end.get())
-        )
-
-    @opt_in
-    def register(self):
-        return Seq(
-            Assert(
-                Global.latest_timestamp() >= self.reg_begin,
-                Global.latest_timestamp() <= self.reg_end,
-            ),
-            self.initialize_account_state(),
-            self.is_registered.set(Int(1))
         )
 
     @external(authorize=Authorize.opted_in())

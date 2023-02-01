@@ -88,7 +88,7 @@ def test_app():
         reg_begin=0,
         reg_end=time_diff,
         vote_begin=time_diff + 2,
-        vote_end=time_diff + 360,
+        vote_end=time_diff + 360
     )
 
     acct1_app_client.opt_in()
