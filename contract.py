@@ -15,13 +15,15 @@ from beaker import (
 
 class Vote(Application):
     asset_id: Final[ApplicationStateValue] = ApplicationStateValue(
-        stack_type=TealType.uint64, descr="Asset ID"
+        stack_type=TealType.uint64,
+        default=Int(0),
+        descr="Asset ID"
     )
 
     is_registered: Final[AccountStateValue] = AccountStateValue(
         stack_type=TealType.uint64,
         default=Int(0),
-        descr="Flag to know if an account can vote or not, 1 - True, 0 - False"
+        descr="Flag to indicate if an account can vote or not, 1 - True, 0 - False"
     )
     vote_amount: Final[AccountStateValue] = AccountStateValue(
         stack_type=TealType.uint64,
@@ -59,6 +61,7 @@ class Vote(Application):
     @external(authorize=Authorize.only(Global.creator_address()))
     def create_asset(self, asset_name: abi.String, total_supply: abi.Uint64):
         return Seq(
+            Assert(self.asset_id == Int(0)),
             InnerTxnBuilder.Execute(
                 {
                     TxnField.type_enum: TxnType.AssetConfig,

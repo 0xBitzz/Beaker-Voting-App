@@ -360,6 +360,11 @@ txn Sender
 callsub authonly_0
 // unauthorized
 assert
+bytec_0 // "asset_id"
+app_global_get
+intc_0 // 0
+==
+assert
 itxn_begin
 pushint 3 // acfg
 itxn_field TypeEnum
