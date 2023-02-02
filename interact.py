@@ -1,24 +1,26 @@
 import time
+import os
 from contract import Vote
 from beaker import sandbox
 from beaker.client import ApplicationClient
 from beaker.client.api_providers import AlgoNode, Network
-from algosdk.atomic_transaction_composer import TransactionWithSigner
-from algosdk.future.transaction import AssetTransferTxn
+from algosdk.atomic_transaction_composer import AccountTransactionSigner, TransactionWithSigner
+from algosdk.transaction import AssetTransferTxn
 from algosdk.error import AlgodHTTPError
 
 
-client = AlgoNode(Network.TestNet).algod()
+# client = AlgoNode(Network.TestNet).algod()
+client = sandbox.get_algod_client()
 
 accts = sandbox.get_accounts()
 
-creator_account = accts.pop()
+creator_acct = accts.pop()
 acct1 = accts.pop()
 acct2 = accts.pop()
 
 app = Vote()
 
-app_client = ApplicationClient(client=client, app=app, signer=creator_account.signer)
+app_client = ApplicationClient(client=client, app=app, signer=creator_acct.signer)
 
 
 def test_app():
@@ -30,8 +32,6 @@ def test_app():
     )
 
     app_client.fund(amt=1_000_000, addr=app_addr)
-    app_client.fund(amt=1_000_000, addr=acct1.address)
-    app_client.fund(amt=1_000_000, addr=acct2.address)
 
     app_client.call(app.create_asset, asset_name="ENB", total_supply=1_000_000)
 

@@ -201,7 +201,7 @@ class Vote(Application):
             self.vote_count.set(self.vote_count + self.vote_amount)
         )
 
-    @bare_external(close_out=CallConfig.CALL, clear_state=CallConfig.CALL)
+    @bare_external(close_out=CallConfig.CALL)
     def clear_vote(self):
         return Seq(
             If(self.vote_choice.get() == Bytes("yes"))

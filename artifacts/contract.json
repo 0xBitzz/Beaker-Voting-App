@@ -115,18 +115,6 @@
             "returns": {
                 "type": "void"
             }
-        },
-        {
-            "name": "upvote",
-            "args": [
-                {
-                    "type": "uint64",
-                    "name": "amount"
-                }
-            ],
-            "returns": {
-                "type": "void"
-            }
         }
     ],
     "networks": {}
